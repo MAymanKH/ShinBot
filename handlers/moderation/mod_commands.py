@@ -3,7 +3,7 @@ from pyrogram import Client
 from pyrogram.types import Message
 from pyrogram.errors import UserNotParticipant, ChatAdminRequired, UserAdminInvalid
 from utils.decorators import admin_only, protect_admins, require_permission
-from utils.helpers import extract_user_and_reason
+from utils.helpers import extract_user_and_reason, get_markdown_mention
 from pyrogram import types
 from utils.usage import save_usage
 
@@ -123,8 +123,8 @@ async def promote_user(client: Client, message: Message):
                 logger.warning(f"Failed to set custom title: {e}")
         
         promote_text = f"⬆️ **User Promoted**\n"
-        promote_text += f"**User:** {user.mention}\n"
-        promote_text += f"**Admin:** {message.from_user.mention}\n"
+        promote_text += f"**User:** {get_markdown_mention(user)}\n"
+        promote_text += f"**Admin:** {get_markdown_mention(message.from_user)}\n"
         if custom_title:
             promote_text += f"**Title:** {custom_title}"
         
@@ -181,8 +181,8 @@ async def kick_user(client: Client, message: Message):
         await client.unban_chat_member(message.chat.id, user.id)
         
         kick_text = f"👢 **User Kicked**\n"
-        kick_text += f"**User:** {user.mention}\n"
-        kick_text += f"**Admin:** {message.from_user.mention}\n"
+        kick_text += f"**User:** {get_markdown_mention(user)}\n"
+        kick_text += f"**Admin:** {get_markdown_mention(message.from_user)}\n"
         if reason:
             kick_text += f"**Reason:** {reason}"
         

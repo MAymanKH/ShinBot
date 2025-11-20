@@ -3,6 +3,7 @@ from pyrogram import Client, types
 from pyrogram.errors import ChatAdminRequired
 from utils.decorators import admin_only
 from utils.usage import save_usage
+from utils.helpers import get_markdown_mention
 
 logger = logging.getLogger(__name__)
 
@@ -39,7 +40,7 @@ async def lock_command(client: Client, message: types.Message):
         await message.reply(
             f"🔒 **Chat Locked**\n\n"
             f"Only administrators can send messages now.\n"
-            f"**Locked by:** {message.from_user.mention}\n\n"
+            f"**Locked by:** {get_markdown_mention(message.from_user)}\n\n"
             f"Use `/unlock` to restore normal chat permissions."
         )
         
@@ -84,7 +85,7 @@ async def unlock_command(client: Client, message: types.Message):
         await message.reply(
             f"🔓 **Chat Unlocked**\n\n"
             f"All members can send messages again.\n"
-            f"**Unlocked by:** {message.from_user.mention}\n\n"
+            f"**Unlocked by:** {get_markdown_mention(message.from_user)}\n\n"
             f"Normal chat permissions have been restored."
         )
         

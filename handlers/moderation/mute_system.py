@@ -8,7 +8,7 @@ from pyrogram.errors import UserAdminInvalid
 from pyrogram.enums import ChatMembersFilter
 from utils.usage import save_usage
 from utils.decorators import admin_only, protect_admins, require_permission
-from utils.helpers import create_pagination_keyboard, extract_user_and_reason, split_text_into_pages
+from utils.helpers import create_pagination_keyboard, extract_user_and_reason, split_text_into_pages, get_markdown_mention
 
 logger = logging.getLogger(__name__)
 
@@ -171,7 +171,7 @@ async def mute_command(client: Client, message: types.Message):
     
     # Check if user is already muted
     if await is_user_muted(client, chat.id, user.id):
-        await message.reply(f"❌ User {user.mention} is already muted.")
+        await message.reply(f"❌ User {get_markdown_mention(user)} is already muted.")
         return
     
     # Parse remaining arguments for time and reason from the initial reason
@@ -266,10 +266,10 @@ async def mute_command(client: Client, message: types.Message):
         
         await message.reply_text(
             f"🔇 **User Muted**\n"
-            f"**User:** {user.mention}\n"
+            f"**User:** {get_markdown_mention(user)}\n"
             f"**Duration:** {mute_time_str}\n"
             f"**Reason:** {reason}\n"
-            f"**Admin:** {message.from_user.mention}"
+            f"**Admin:** {get_markdown_mention(message.from_user)}"
             + (f"\n**Auto-unmute:** {mute_until.strftime('%Y-%m-%d %H:%M')} UTC" if mute_until else "")
         )
     except UserAdminInvalid:
@@ -308,8 +308,8 @@ async def unmute_command(client: Client, message: types.Message):
         # Send confirmation message
         await message.reply_text(
             f"🔊 **User Unmuted**\n"
-            f"**User:** {user.mention}\n"
-            f"**Admin:** {message.from_user.mention}"
+            f"**User:** {get_markdown_mention(user)}\n"
+            f"**Admin:** {get_markdown_mention(message.from_user)}"
         )
     except UserAdminInvalid:
         await message.reply("❌ I need admin privileges to unmute users.")
@@ -387,11 +387,11 @@ async def mutes_command(client: Client, message: types.Message):
                 reason_str = reason if reason else "No reason provided"
                 try:
                     admin_user = await client.get_users(admin_id)
-                    admin_name_str = admin_user.mention
+                    admin_name_str = get_markdown_mention(admin_user)
                 except Exception:
                     admin_name_str = f"Admin ID: {admin_id}"
 
-            lines.append(f"👤 {user.mention} (`{user.id}`)")
+            lines.append(f"👤 {get_markdown_mention(user)} (`{user.id}`)")
             lines.append(f"  - **Duration:** {duration_str}")
             lines.append(f"  - **Reason:** {reason_str}")
             lines.append(f"  - **Muted by:** {admin_name_str}\n") # Add a newline for better spacing

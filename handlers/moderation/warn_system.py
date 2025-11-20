@@ -4,7 +4,7 @@ import logging
 from pyrogram import Client, types
 from utils.usage import save_usage
 from utils.decorators import admin_only
-from utils.helpers import create_pagination_keyboard, extract_user_and_reason, split_text_into_pages
+from utils.helpers import create_pagination_keyboard, extract_user_and_reason, split_text_into_pages, get_markdown_mention
 
 logger = logging.getLogger(__name__)
 
@@ -92,11 +92,11 @@ async def warn_command(client: Client, message: types.Message):
         
         # Send confirmation message
         await message.reply(
-            f"⚠️ Warning issued to {user.mention}\n\n"
+            f"⚠️ Warning issued to {get_markdown_mention(user)}\n\n"
             f"**Warning ID:** #{warn_id}\n"
             f"**Reason:** {reason}\n"
             f"**Total warnings:** {total_warns}\n"
-            f"**Issued by:** {sender.mention}"
+            f"**Issued by:** {get_markdown_mention(sender)}"
         )
         
     except Exception as e:
@@ -167,7 +167,7 @@ async def warndel_command(client: Client, message: types.Message):
             f"✅ Warning #{warn_id} has been deleted\n\n"
             f"User: {user_name}\n"
             f"Reason: {warning[1]}\n"
-            f"Deleted by: {sender.mention}"
+            f"Deleted by: {get_markdown_mention(sender)}"
         )
         
     except Exception as e:
@@ -213,7 +213,7 @@ async def show_user_warnings(client: Client, message: types.Message, chat, user)
             return
         
         # Build response lines
-        lines = [f"**⚠️ Warnings for {user.mention}**\n"]
+        lines = [f"**⚠️ Warnings for {get_markdown_mention(user)}**\n"]
         
         for warn_id, warned_by, reason, warn_date in warnings:
             # Format date
@@ -226,7 +226,7 @@ async def show_user_warnings(client: Client, message: types.Message, chat, user)
             # Get admin info
             try:
                 admin_user = await client.get_users(warned_by)
-                admin_name = admin_user.mention
+                admin_name = get_markdown_mention(admin_user)
             except:
                 admin_name = f"Admin {warned_by}"
             
@@ -296,7 +296,7 @@ async def show_all_warnings(client: Client, message: types.Message, chat, sender
             # Get user info
             try:
                 user = await client.get_users(user_id)
-                user_name = user.mention
+                user_name = get_markdown_mention(user)
             except:
                 user_name = f"User {user_id}"
             
@@ -313,7 +313,7 @@ async def show_all_warnings(client: Client, message: types.Message, chat, sender
                 # Get admin info
                 try:
                     admin_user = await client.get_users(warned_by)
-                    admin_name = admin_user.mention
+                    admin_name = get_markdown_mention(admin_user)
                 except:
                     admin_name = f"Admin {warned_by}"
                 

@@ -4,7 +4,7 @@ from pyrogram.types import Message
 from pyrogram.errors import UserNotParticipant, ChatAdminRequired, UserAdminInvalid
 from pyrogram.enums import ChatMembersFilter
 from utils.decorators import admin_only, protect_admins, require_permission
-from utils.helpers import create_pagination_keyboard, extract_user_and_reason, split_text_into_pages
+from utils.helpers import create_pagination_keyboard, extract_user_and_reason, split_text_into_pages, get_markdown_mention
 from utils.usage import save_usage
 
 logger = logging.getLogger(__name__)
@@ -57,8 +57,8 @@ async def ban_user(client: Client, message: Message):
         await client.ban_chat_member(message.chat.id, user.id)
         
         ban_text = f"🔨 **User Banned**\n"
-        ban_text += f"**User:** {user.mention}\n"
-        ban_text += f"**Admin:** {message.from_user.mention}\n"
+        ban_text += f"**User:** {get_markdown_mention(user)}\n"
+        ban_text += f"**Admin:** {get_markdown_mention(message.from_user)}\n"
         if reason:
             ban_text += f"**Reason:** {reason}"
         
@@ -89,8 +89,8 @@ async def unban_user(client: Client, message: Message):
         await client.unban_chat_member(message.chat.id, user.id)
         
         unban_text = f"✅ **User Unbanned**\n"
-        unban_text += f"**User:** {user.mention}\n"
-        unban_text += f"**Admin:** {message.from_user.mention}\n"
+        unban_text += f"**User:** {get_markdown_mention(user)}\n"
+        unban_text += f"**Admin:** {get_markdown_mention(message.from_user)}\n"
         if reason:
             unban_text += f"**Reason:** {reason}"
         
@@ -129,7 +129,7 @@ async def banslist_command(client: Client, message: Message):
         for member in banned_members:
             # We can only get the user's information, not who banned them or why.
             user = member.user
-            lines.append(f"👤 {user.mention} (`{user.id}`)")
+            lines.append(f"👤 {get_markdown_mention(user)} (`{user.id}`)")
         
         # Pagination logic remains the same
         pages = await split_text_into_pages(lines)

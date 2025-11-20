@@ -177,3 +177,7 @@ async def create_pagination_keyboard(current_page, total_pages, callback_prefix)
         keyboard.append(buttons)
     
     return InlineKeyboardMarkup(keyboard) if keyboard else None
+
+def get_markdown_mention(user):
+    """Return a markdown link to the user's profile."""
+    return f"[{user.first_name}](tg://user?id={user.id})"

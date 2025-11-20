@@ -1,7 +1,7 @@
 import asyncio
 import datetime
 import aiosqlite
-from utils.helpers import create_pagination_keyboard, split_text_into_pages
+from utils.helpers import create_pagination_keyboard, split_text_into_pages, get_markdown_mention
 from utils.usage import save_usage
 from pyrogram import Client, types
 from handlers.timer.timer_scheduler import get_chat_timer_table, schedule_timer, cancel_timer
@@ -218,7 +218,7 @@ async def list_timers_command(client: Client, message: types.Message):
         # Try to get user info
         try:
             timer_user = await client.get_users(user_id)
-            user_display = timer_user.mention
+            user_display = get_markdown_mention(timer_user)
         except:
             user_display = f"User {user_id}"
         
@@ -363,7 +363,7 @@ async def remove_timer_command(client: Client, message: types.Message):
         # Try to get user info
         try:
             timer_user = await client.get_users(user_id)
-            user_display = timer_user.mention
+            user_display = get_markdown_mention(timer_user)
         except:
             user_display = f"User {user_id}"
         

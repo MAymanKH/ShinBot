@@ -2,6 +2,7 @@ import asyncio
 import datetime
 import aiosqlite
 import os
+from utils.helpers import get_markdown_mention
 
 # Dictionary to track active timer tasks
 # Key: (chat_id, timer_id), Value: asyncio task
@@ -88,10 +89,7 @@ async def check_pending_timers(client):
                         if chat_id < 0:  # Negative chat_id indicates group/supergroup
                             try:
                                 user = await client.get_users(user_id)
-                                user_name = user.first_name
-                                if user.last_name:
-                                    user_name += f" {user.last_name}"
-                                end_message = f"[{user_name}](tg://user?id={user_id}), y" + end_message[1:]
+                                end_message = f"{get_markdown_mention(user)}, y" + end_message[1:]
                             except:
                                 end_message = f"[@user](tg://user?id={user_id}), y" + end_message[1:]
                         
@@ -142,10 +140,7 @@ async def schedule_timer(client, chat_id, timer_id, delay, reason, message_id=No
                     if chat_id < 0:  # Negative chat_id indicates group/supergroup
                         try:
                             user = await client.get_users(user_id)
-                            user_name = user.first_name
-                            if user.last_name:
-                                user_name += f" {user.last_name}"
-                            end_message = f"[{user_name}](tg://user?id={user_id}), y" + end_message[1:]
+                            end_message = f"{get_markdown_mention(user)}, y" + end_message[1:]
                         except:
                             end_message = f"[@user](tg://user?id={user_id}), y" + end_message[1:]
                     
