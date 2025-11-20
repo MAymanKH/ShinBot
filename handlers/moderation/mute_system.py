@@ -270,7 +270,7 @@ async def mute_command(client: Client, message: types.Message):
             f"**Duration:** {mute_time_str}\n"
             f"**Reason:** {reason}\n"
             f"**Admin:** {message.from_user.mention}"
-            + (f"\n**Auto-unmute:** {mute_until.strftime('%Y-%m-%d %H:%M:%S')}" if mute_until else "")
+            + (f"\n**Auto-unmute:** {mute_until.strftime('%Y-%m-%d %H:%M')} UTC" if mute_until else "")
         )
     except UserAdminInvalid:
         await message.reply("❌ I need admin privileges to mute users.")
