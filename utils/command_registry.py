@@ -27,8 +27,10 @@ def register_handlers(client: Client):
     client.add_handler(MessageHandler(handlers.search_command, filters.command("search")))
     client.add_handler(MessageHandler(handlers.chatid_command, filters.command("chatid")))
     client.add_handler(MessageHandler(handlers.pfp_command, filters.command("pfp")))
+    client.add_handler(MessageHandler(handlers.userinfo_command, filters.command("userinfo")))
     client.add_handler(MessageHandler(handlers.chatpfp_command, filters.command("chatpfp")))
     client.add_handler(MessageHandler(handlers.calc_command, filters.command("calc")))
+    client.add_handler(MessageHandler(handlers.qr_command, filters.command("qr")))
     client.add_handler(MessageHandler(handlers.groupinfo_command, filters.command("groupinfo")))
     client.add_handler(MessageHandler(handlers.timer_command, filters.command("timer")))
     client.add_handler(MessageHandler(handlers.list_timers_command, filters.command("timers")))
@@ -61,7 +63,7 @@ def register_handlers(client: Client):
     # Register a handler for text messages that are not commands
     all_commands = [
         "start", "help", "mute", "unmute", "mutelist", "lock", "unlock", "joindate", "usagedata", "character", "anime","manga", "aghpb",
-        "echo", "ping", "search", "feedback", "calc", "groupinfo", "pfp", "chatpfp", "chatid", "timer",
+        "echo", "ping", "search", "feedback", "calc", "qr", "groupinfo", "pfp", "chatpfp", "chatid", "timer", "userinfo",
         "timers", "timerdel", "reverse", "slot", "coinflip", "geekjoke", "dadjoke", "tictactoe",
         "dog", "cat", "affirmation", "advice", "choose", "rps", "yt", "warn", "warndel", "warns",
         "ban", "unban", "bans", "kick", "mute", "unmute", "promote"

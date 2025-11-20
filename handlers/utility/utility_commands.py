@@ -2,6 +2,8 @@ import time
 import math
 import re
 import asyncio
+import io
+import qrcode
 from pyrogram import Client, types
 from tcp_latency import measure_latency
 from utils.usage import save_usage
@@ -179,3 +181,46 @@ async def feedback_command(client: Client, message: types.Message):
         
     except Exception as e:
         await message.reply(f"❌ Error sending feedback: {str(e)}")
+
+# ---------------------------
+# QR Code command
+# ---------------------------
+async def qr_command(client: Client, message: types.Message):
+    chat = message.chat
+    await save_usage(chat, "qr")
+    
+    args = message.text.split(maxsplit=1)
+    if len(args) < 2:
+        await message.reply("Usage: /qr <text>\nExample: /qr Hello World")
+        return
+    
+    text = args[1].strip()
+    
+    # Limit text length
+    if len(text) > 1000:
+        await message.reply("Error: Text too long (max 1000 characters)")
+        return
+    
+    try:
+        # Generate QR code
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=10,
+            border=4,
+        )
+        qr.add_data(text)
+        qr.make(fit=True)
+        
+        img = qr.make_image(fill_color="black", back_color="white")
+        
+        # Save to BytesIO object
+        bio = io.BytesIO()
+        img.save(bio)
+        bio.seek(0)
+        bio.name = "qrcode.png"
+        
+        await message.reply_photo(photo=bio, caption=f"**QR Code for:** `{text}`")
+        
+    except Exception as e:
+        await message.reply(f"❌ Error generating QR code: {str(e)}")

@@ -470,6 +470,92 @@ async def pfp_command(client: Client, message: types.Message):
         await message.reply(f"Error retrieving user information: {str(e)}")
 
 # ---------------------------
+# User Info command
+# ---------------------------
+async def userinfo_command(client: Client, message: types.Message):
+    chat = message.chat
+    await save_usage(chat, "userinfo")
+    
+    # Get target user using helper function
+    user, _ = await extract_user_and_reason(client, message)
+    
+    # If no user found from helper, use message sender as fallback
+    if not user:
+        user = message.from_user
+    
+    if not user:
+        await message.reply("Error: No user found.")
+        return
+    
+    try:
+        # Get detailed user information
+        full_user = await client.get_users(user.id)
+        
+        # Build info text
+        info_text = f"👤 **User Information**\n"
+        info_text += "═" * 30 + "\n\n"
+        
+        # Basic Info
+        info_text += f"🆔 **ID:** `{full_user.id}`\n"
+        info_text += f"📝 **First Name:** {full_user.first_name}\n"
+        if full_user.last_name:
+            info_text += f"📝 **Last Name:** {full_user.last_name}\n"
+        if full_user.username:
+            info_text += f"🔗 **Username:** @{full_user.username}\n"
+        
+        # Status and Type
+        info_text += f"\n🤖 **Is Bot:** {'Yes' if full_user.is_bot else 'No'}\n"
+        if full_user.is_scam:
+            info_text += f"⚠️ **Scam:** Yes\n"
+        if full_user.is_fake:
+            info_text += f"⚠️ **Fake:** Yes\n"
+        if full_user.is_verified:
+            info_text += f"✅ **Verified:** Yes\n"
+        if full_user.is_premium:
+            info_text += f"🌟 **Premium:** Yes\n"
+            
+        # Language
+        if full_user.language_code:
+            info_text += f"🌐 **Language:** {full_user.language_code}\n"
+            
+        # DC ID (Data Center)
+        if full_user.dc_id:
+            info_text += f"🏢 **DC ID:** {full_user.dc_id}\n"
+            
+        # Chat Member Status (if in a group)
+        if chat.type in [ChatType.GROUP, ChatType.SUPERGROUP]:
+            try:
+                member = await client.get_chat_member(chat.id, full_user.id)
+                info_text += f"\n📊 **Group Status:** {member.status.value.title()}\n"
+                
+                if member.joined_date:
+                    info_text += f"📅 **Joined:** {member.joined_date.strftime('%Y-%m-%d %H:%M:%S')}\n"
+                    
+                if member.promoted_by:
+                    info_text += f"👮 **Promoted By:** {member.promoted_by.first_name}\n"
+                    
+                if member.custom_title:
+                    info_text += f"🏷️ **Title:** {member.custom_title}\n"
+            except Exception:
+                pass
+        
+        # Profile Photo
+        if full_user.photo:
+            try:
+                photo_file = await client.download_media(full_user.photo.big_file_id, in_memory=True)
+                await message.reply_photo(
+                    photo_file,
+                    caption=info_text
+                )
+            except Exception:
+                await message.reply_text(info_text)
+        else:
+            await message.reply_text(info_text)
+            
+    except Exception as e:
+        await message.reply_text(f"❌ Error retrieving user information: {str(e)}")
+
+# ---------------------------
 # Chat Profile Picture command
 # ---------------------------
 async def chatpfp_command(client: Client, message: types.Message):

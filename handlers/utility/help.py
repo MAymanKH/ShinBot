@@ -30,13 +30,15 @@ COMMAND_CATEGORIES = {
             "/chatid": "Get the current chat ID",
             "/chatpfp": "Get the current chat picture",
             "/feedback": "Send feedback to developers",
-            "/groupinfo": "Get group's info",
+            "/groupinfo": "Get group's detailed info",
             "/help": "This message",
             "/joindate": "Get each member's join date in the group",
             "/pfp": "Get user's profile picture",
             "/ping": "Get bot's latency",
+            "/qr": "Generate a QR code",
             "/search": "Search the internet",
-            "/start": "Bot's introduction"
+            "/start": "Bot's introduction",
+            "/userinfo": "Get user's detailed info"
         }
     },
     "video_download": {
