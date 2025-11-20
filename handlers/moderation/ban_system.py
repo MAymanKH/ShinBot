@@ -62,7 +62,7 @@ async def ban_user(client: Client, message: Message):
         if reason:
             ban_text += f"**Reason:** {reason}"
         
-        await message.reply(ban_text)
+        await message.reply(ban_text, disable_web_page_preview=True)
         logger.info(f"User {user.id} banned from chat {message.chat.id} by {message.from_user.id}")
         
     except ChatAdminRequired:
@@ -94,7 +94,7 @@ async def unban_user(client: Client, message: Message):
         if reason:
             unban_text += f"**Reason:** {reason}"
         
-        await message.reply(unban_text)
+        await message.reply(unban_text, disable_web_page_preview=True)
         logger.info(f"User {user.id} unbanned from chat {message.chat.id} by {message.from_user.id}")
         
     except ChatAdminRequired:

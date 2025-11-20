@@ -105,10 +105,11 @@ async def check_pending_unmutes(client: Client):
                                 await client.send_message(
                                     chat_id,
                                     unmute_message,
-                                    reply_to_message_id=mute_message_id
+                                    reply_to_message_id=mute_message_id,
+                                    disable_web_page_preview=True
                                 )
                             else:
-                                await client.send_message(chat_id, unmute_message)
+                                await client.send_message(chat_id, unmute_message, disable_web_page_preview=True)
                         except:
                             pass  # Don't fail if we can't send message
                         
@@ -171,7 +172,7 @@ async def mute_command(client: Client, message: types.Message):
     
     # Check if user is already muted
     if await is_user_muted(client, chat.id, user.id):
-        await message.reply(f"❌ User {get_markdown_mention(user)} is already muted.")
+        await message.reply(f"❌ User {get_markdown_mention(user)} is already muted.", disable_web_page_preview=True)
         return
     
     # Parse remaining arguments for time and reason from the initial reason
@@ -270,7 +271,8 @@ async def mute_command(client: Client, message: types.Message):
             f"**Duration:** {mute_time_str}\n"
             f"**Reason:** {reason}\n"
             f"**Admin:** {get_markdown_mention(message.from_user)}"
-            + (f"\n**Auto-unmute:** {mute_until.strftime('%Y-%m-%d %H:%M')} UTC" if mute_until else "")
+            + (f"\n**Auto-unmute:** {mute_until.strftime('%Y-%m-%d %H:%M')} UTC" if mute_until else ""),
+            disable_web_page_preview=True
         )
     except UserAdminInvalid:
         await message.reply("❌ I need admin privileges to mute users.")
@@ -309,7 +311,8 @@ async def unmute_command(client: Client, message: types.Message):
         await message.reply_text(
             f"🔊 **User Unmuted**\n"
             f"**User:** {get_markdown_mention(user)}\n"
-            f"**Admin:** {get_markdown_mention(message.from_user)}"
+            f"**Admin:** {get_markdown_mention(message.from_user)}",
+            disable_web_page_preview=True
         )
     except UserAdminInvalid:
         await message.reply("❌ I need admin privileges to unmute users.")

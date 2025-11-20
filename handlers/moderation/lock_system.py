@@ -41,7 +41,8 @@ async def lock_command(client: Client, message: types.Message):
             f"🔒 **Chat Locked**\n\n"
             f"Only administrators can send messages now.\n"
             f"**Locked by:** {get_markdown_mention(message.from_user)}\n\n"
-            f"Use `/unlock` to restore normal chat permissions."
+            f"Use `/unlock` to restore normal chat permissions.",
+            disable_web_page_preview=True
         )
         
         logger.info(f"Chat {chat.id} locked by admin {message.from_user.id}")
@@ -86,7 +87,8 @@ async def unlock_command(client: Client, message: types.Message):
             f"🔓 **Chat Unlocked**\n\n"
             f"All members can send messages again.\n"
             f"**Unlocked by:** {get_markdown_mention(message.from_user)}\n\n"
-            f"Normal chat permissions have been restored."
+            f"Normal chat permissions have been restored.",
+            disable_web_page_preview=True
         )
         
         logger.info(f"Chat {chat.id} unlocked by admin {message.from_user.id}")

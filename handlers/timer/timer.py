@@ -238,7 +238,7 @@ async def list_timers_command(client: Client, message: types.Message):
     
     if len(pages) == 1:
         # Single page, no pagination needed
-        await message.reply(pages[0])
+        await message.reply(pages[0], disable_web_page_preview=True)
     else:
         # Multiple pages, use pagination
         callback_prefix = f"timers_{chat.id}"
@@ -252,7 +252,7 @@ async def list_timers_command(client: Client, message: types.Message):
         
         # Send first page with navigation
         keyboard = await create_pagination_keyboard(1, len(pages), callback_prefix)
-        await message.reply(pages[0], reply_markup=keyboard)
+        await message.reply(pages[0], reply_markup=keyboard, disable_web_page_preview=True)
 
 # Remove timer command
 async def remove_timer_command(client: Client, message: types.Message):
@@ -385,7 +385,7 @@ async def remove_timer_command(client: Client, message: types.Message):
     
     if len(pages) == 1:
         # Single page, no pagination needed
-        await message.reply(pages[0])
+        await message.reply(pages[0], disable_web_page_preview=True)
     else:
         # Multiple pages, use pagination
         callback_prefix = f"timerdel_{chat.id}"
@@ -399,7 +399,7 @@ async def remove_timer_command(client: Client, message: types.Message):
         
         # Send first page with navigation
         keyboard = await create_pagination_keyboard(1, len(pages), callback_prefix)
-        await message.reply(pages[0], reply_markup=keyboard)
+        await message.reply(pages[0], reply_markup=keyboard, disable_web_page_preview=True)
 
 # ---------------------------
 # Timer pagination callback handler
@@ -445,7 +445,8 @@ async def handle_timer_pagination(client: Client, callback_query):
         # Edit message with new page
         await callback_query.edit_message_text(
             pages[page_num - 1],
-            reply_markup=keyboard
+            reply_markup=keyboard,
+            disable_web_page_preview=True
         )
         
         await callback_query.answer()

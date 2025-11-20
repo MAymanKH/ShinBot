@@ -93,7 +93,7 @@ async def check_pending_timers(client):
                             except:
                                 end_message = f"[@user](tg://user?id={user_id}), y" + end_message[1:]
                         
-                        await client.send_message(chat_id, end_message, reply_to_message_id=message_id)
+                        await client.send_message(chat_id, end_message, reply_to_message_id=message_id, disable_web_page_preview=True)
                         
                         # Update the timer status to 'ended'
                         await cursor.execute(f"UPDATE {table_name} SET status = 'ended' WHERE id = ?", (timer_id,))
@@ -145,9 +145,9 @@ async def schedule_timer(client, chat_id, timer_id, delay, reason, message_id=No
                             end_message = f"[@user](tg://user?id={user_id}), y" + end_message[1:]
                     
                     if message_id:
-                        await client.send_message(chat_id, end_message, reply_to_message_id=message_id)
+                        await client.send_message(chat_id, end_message, reply_to_message_id=message_id, disable_web_page_preview=True)
                     else:
-                        await client.send_message(chat_id, end_message)
+                        await client.send_message(chat_id, end_message, disable_web_page_preview=True)
                     
                     # Update the timer status to 'ended'
                     await cursor.execute(

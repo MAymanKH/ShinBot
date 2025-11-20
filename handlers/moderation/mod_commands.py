@@ -128,7 +128,7 @@ async def promote_user(client: Client, message: Message):
         if custom_title:
             promote_text += f"**Title:** {custom_title}"
         
-        await message.reply(promote_text)
+        await message.reply(promote_text, disable_web_page_preview=True)
         logger.info(f"User {user.id} promoted in chat {message.chat.id} by {message.from_user.id}")
         
     except ChatAdminRequired:
@@ -186,7 +186,7 @@ async def kick_user(client: Client, message: Message):
         if reason:
             kick_text += f"**Reason:** {reason}"
         
-        await message.reply(kick_text)
+        await message.reply(kick_text, disable_web_page_preview=True)
         logger.info(f"User {user.id} kicked from chat {message.chat.id} by {message.from_user.id}")
         
     except ChatAdminRequired:
