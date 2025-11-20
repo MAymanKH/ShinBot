@@ -112,8 +112,8 @@ async def banslist_command(client: Client, message: Message):
     chat = message.chat
     sender = message.from_user
     
-    logger.info(f"Banslist command called by user {sender.id} in chat {chat.id}")
-    await save_usage(chat, "banslist")
+    logger.info(f"Bans command called by user {sender.id} in chat {chat.id}")
+    await save_usage(chat, "bans")
     
     try:
         banned_members = []
@@ -139,7 +139,7 @@ async def banslist_command(client: Client, message: Message):
             final_text = "\n".join(lines)
             await message.reply(final_text, disable_web_page_preview=True)
         else:
-            callback_prefix = f"banslist_{chat.id}"
+            callback_prefix = f"bans_{chat.id}"
             
             pagination_data[callback_prefix] = {
                 'pages': pages,
@@ -153,5 +153,56 @@ async def banslist_command(client: Client, message: Message):
     except ChatAdminRequired:
         await message.reply("❌ I need to be an admin with the 'can_restrict_members' permission to see the ban list.")
     except Exception as e:
-        logger.error(f"Error in banslist_command for chat {chat.id}: {e}")
+        logger.error(f"Error in bans_command for chat {chat.id}: {e}")
         await message.reply(f"❌ An error occurred while fetching the ban list: {str(e)}")
+
+async def handle_bans_pagination(client: Client, callback_query):
+    """Handle pagination callbacks for bans list."""
+    try:
+        data = callback_query.data
+        
+        # Extract callback prefix and page number
+        if "_" not in data:
+            return
+        
+        parts = data.rsplit("_", 1)
+        callback_prefix = parts[0]
+        try:
+            page_num = int(parts[1])
+        except ValueError:
+            return
+        
+        # Check if we have pagination data for this prefix
+        if callback_prefix not in pagination_data:
+            await callback_query.answer("Pagination data expired. Please run the command again.", show_alert=True)
+            return
+        
+        data_info = pagination_data[callback_prefix]
+        
+        # Check if the user who clicked is the one who requested it
+        if callback_query.from_user.id != data_info['user_id']:
+            await callback_query.answer("You didn't request this information.", show_alert=True)
+            return
+        
+        pages = data_info['pages']
+        
+        # Validate page number
+        if page_num < 1 or page_num > len(pages):
+            await callback_query.answer("Invalid page number.", show_alert=True)
+            return
+        
+        # Create new keyboard
+        keyboard = await create_pagination_keyboard(page_num, len(pages), callback_prefix)
+        
+        # Edit message with new page
+        await callback_query.edit_message_text(
+            pages[page_num - 1],
+            reply_markup=keyboard,
+            disable_web_page_preview=True
+        )
+        
+        await callback_query.answer()
+        
+    except Exception as e:
+        logger.error(f"Error in bans pagination: {e}")
+        await callback_query.answer("An error occurred while navigating.", show_alert=True)

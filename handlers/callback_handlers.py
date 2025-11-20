@@ -35,6 +35,11 @@ async def button_click_handler(client: Client, callback_query):
         await handlers.handle_mutes_pagination(client, callback_query)
         return
     
+    # Handle bans pagination callbacks
+    if data.startswith("bans_"):
+        await handlers.handle_bans_pagination(client, callback_query)
+        return
+    
     # Handle timer pagination callbacks
     if data.startswith("timers_") or data.startswith("timerdel_"):
         await handlers.handle_timer_pagination(client, callback_query)
