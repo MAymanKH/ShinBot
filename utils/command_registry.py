@@ -57,6 +57,7 @@ def register_handlers(client: Client):
     client.add_handler(MessageHandler(handlers.kick_user, filters.command("kick")))
     client.add_handler(MessageHandler(handlers.promote_user, filters.command("promote")))
     client.add_handler(MessageHandler(handlers.yt_command, filters.command("yt")))
+    client.add_handler(MessageHandler(handlers.hs_command, filters.command("hs")))
     if ENABLE_MEME_COMMAND: client.add_handler(MessageHandler(handlers.meme_command, filters.command("meme")))
     if ENABLE_GEMINI_COMMAND: client.add_handler(MessageHandler(handlers.gemini_command, filters.command("gemini")))
     if ENABLE_IMAGINE_COMMAND: client.add_handler(MessageHandler(handlers.imagine_command, filters.command("imagine")))
@@ -67,7 +68,7 @@ def register_handlers(client: Client):
         "echo", "ping", "search", "feedback", "calc", "qr", "groupinfo", "pfp", "chatpfp", "chatid", "timer", "userinfo",
         "timers", "timerdel", "reverse", "slot", "coinflip", "geekjoke", "dadjoke", "tictactoe",
         "dog", "cat", "affirmation", "advice", "choose", "rps", "yt", "warn", "warndel", "warns",
-        "ban", "unban", "bans", "kick", "mute", "unmute", "promote"
+        "ban", "unban", "bans", "kick", "mute", "unmute", "promote", "hs"
     ]
 
     # Add conditional commands to the list

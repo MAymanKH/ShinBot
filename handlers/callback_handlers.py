@@ -30,6 +30,11 @@ async def button_click_handler(client: Client, callback_query):
         await handlers.handle_warns_pagination(client, callback_query)
         return
     
+    # Handle hadith callbacks
+    if data.startswith("hadith_"):
+        await handlers.handle_hadith_callback(client, callback_query)
+        return
+    
     # Handle mutes pagination callbacks
     if data.startswith("mutes_"):
         await handlers.handle_mutes_pagination(client, callback_query)

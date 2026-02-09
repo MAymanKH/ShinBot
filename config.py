@@ -17,6 +17,7 @@ with open("settings.yaml", "r") as file:
     REDDIT_CLIENT_ID = config.get("REDDIT_CLIENT_ID")
     REDDIT_CLIENT_SECRET = config.get("REDDIT_CLIENT_SECRET")
     REDDIT_USER_AGENT = config.get("REDDIT_USER_AGENT")
+    HADITH_API_BASE = config.get("HADITH_API_BASE", "https://hadith-searcher-dorar-api-amx.vercel.app")
 
     DEBUG = config.get("DEBUG")
     ENABLE_GEMINI_COMMAND = config.get("ENABLE_GEMINI_COMMAND")

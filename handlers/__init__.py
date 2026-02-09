@@ -18,6 +18,7 @@ from .utility.utility_commands import *
 from .utility.info_commands import *
 from .utility.help import *
 from .utility.search import *
+from .utility.hadith_commands import *
 from .yt.yt_commands import *
 from .yt.yt_callbacks import *
 from .callback_handlers import *
