@@ -97,7 +97,7 @@ async def check_pending_timers(client):
                         if chat_id < 0:  # Negative chat_id indicates group/supergroup
                             try:
                                 user = await client.get_users(user_id)
-                                end_message = f"{get_markdown_mention(user)}, y" + end_message[1:]
+                                end_message = f"{user.mention}, y" + end_message[1:]
                             except:
                                 end_message = f"[@user](tg://user?id={user_id}), y" + end_message[1:]
                         
@@ -148,7 +148,7 @@ async def schedule_timer(client, chat_id, timer_id, delay, reason, message_id=No
                     if chat_id < 0:  # Negative chat_id indicates group/supergroup
                         try:
                             user = await client.get_users(user_id)
-                            end_message = f"{get_markdown_mention(user)}, y" + end_message[1:]
+                            end_message = f"{user.mention}, y" + end_message[1:]
                         except:
                             end_message = f"[@user](tg://user?id={user_id}), y" + end_message[1:]
                     
